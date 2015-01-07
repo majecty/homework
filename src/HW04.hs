@@ -75,3 +75,6 @@ insertBST compareFunc element (Node leftTree value rightTree)
   | compareFunc element value == GT = Node leftTree value newRightTree
   where newLeftTree = insertBST compareFunc element leftTree
         newRightTree = insertBST compareFunc element rightTree
+
+allCaps :: [String] -> Bool
+allCaps _ = False
