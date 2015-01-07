@@ -86,3 +86,6 @@ allCaps strings = all isCaps strings
 
 dropTrailingWhitespace :: String -> String
 dropTrailingWhitespace word = reverse . dropWhile ((==) ' ') . reverse $ word
+
+firstLetters :: [String] -> [Char]
+firstLetters strings = [ firstLetter | (firstLetter:_) <- strings ]
