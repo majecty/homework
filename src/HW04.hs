@@ -89,3 +89,11 @@ dropTrailingWhitespace word = reverse . dropWhile ((==) ' ') . reverse $ word
 
 firstLetters :: [String] -> [Char]
 firstLetters strings = [ firstLetter | (firstLetter:_) <- strings ]
+
+concatWithComma :: [String] -> String
+concatWithComma [] = ""
+concatWithComma (x:[]) = x
+concatWithComma (x:xs) = x ++ "," ++ (concatWithComma xs)
+
+asList :: [String] -> String
+asList strings = "[" ++ (concatWithComma strings) ++ "]"
