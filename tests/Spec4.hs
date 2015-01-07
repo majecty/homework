@@ -11,6 +11,8 @@ instance Eq a => Eq (BST a) where
   Leaf == Node _ _ _ = False
   Node _ _ _ == Leaf = False
 
+compareInt :: Int -> Int -> Ordering
+compareInt = compare
 
 main :: IO()
 main = hspec $ do
@@ -20,4 +22,6 @@ main = hspec $ do
 
   describe "Insert BST" $ do
     it "empty tree insert success" $ do
-      insertBST (compare :: Int -> Int -> Ordering) 3 Leaf `shouldBe` Node Leaf 3 Leaf
+      insertBST compareInt 3 Leaf `shouldBe` Node Leaf 3 Leaf
+    it "insert two value success" $ do
+      insertBST compareInt 5 (insertBST compareInt 3 Leaf) `shouldBe` Node Leaf 3 (Node Leaf 5 Leaf)
