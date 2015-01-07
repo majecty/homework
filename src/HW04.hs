@@ -2,6 +2,7 @@
 module HW04 where
 
 import BST
+import Data.Char
 
 ---- We do not know the relationship between a and b.
 ---- So could not make b uaing a
@@ -76,5 +77,9 @@ insertBST compareFunc element (Node leftTree value rightTree)
   where newLeftTree = insertBST compareFunc element leftTree
         newRightTree = insertBST compareFunc element rightTree
 
+isCaps :: String -> Bool
+isCaps [] = False
+isCaps (x:_) = isUpper x
+
 allCaps :: [String] -> Bool
-allCaps _ = False
+allCaps strings = all isCaps strings
