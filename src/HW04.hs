@@ -83,3 +83,6 @@ isCaps (x:_) = isUpper x
 
 allCaps :: [String] -> Bool
 allCaps strings = all isCaps strings
+
+dropTrailingWhitespace :: String -> String
+dropTrailingWhitespace word = reverse . dropWhile ((==) ' ') . reverse $ word
