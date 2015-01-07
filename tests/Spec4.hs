@@ -25,3 +25,13 @@ main = hspec $ do
       insertBST compareInt 3 Leaf `shouldBe` Node Leaf 3 Leaf
     it "insert two value success" $ do
       insertBST compareInt 5 (insertBST compareInt 3 Leaf) `shouldBe` Node Leaf 3 (Node Leaf 5 Leaf)
+
+  describe "allCaps" $ do
+    it "should success." $ do
+      allCaps ["Hi","There"] `shouldBe` True
+    it "should success when empty list" $ do
+      allCaps [] `shouldBe` True
+    it "should fail with empty string." $ do
+      allCaps ["", "Blah"] `shouldBe` False
+    it "should fail with fail input." $ do
+      allCaps ["Hi","there"] `shouldBe` False
