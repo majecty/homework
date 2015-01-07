@@ -68,4 +68,10 @@ import BST
 --ex12 maybea = Nothing
 
 insertBST :: (a -> a -> Ordering) -> a -> BST a -> BST a
-insertBST _ element (Leaf) = Node Leaf element Leaf
+insertBST _ element Leaf = Node Leaf element Leaf
+insertBST compareFunc element (Node leftTree value rightTree)
+  | compareFunc element value == LT = Node newLeftTree value rightTree
+  | compareFunc element value == EQ = Node newLeftTree value rightTree
+  | compareFunc element value == GT = Node leftTree value newRightTree
+  where newLeftTree = insertBST compareFunc element leftTree
+        newRightTree = insertBST compareFunc element rightTree
