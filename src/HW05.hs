@@ -1,6 +1,8 @@
 module HW05 where
 
+import Data.Bits
 import Data.List
+import Data.Maybe
 import Ring
 
 data Mod5 = MkMod Integer
@@ -57,3 +59,13 @@ instance Parsable Mat2x2 where
 parseMatrix :: String -> Maybe (Mat2x2, String)
 parseMatrix = parse
 
+instance Ring Bool where
+  addId = False
+  addInv = not
+  mulId = True
+
+  add = xor
+  mul = (&&)
+
+instance Parsable Bool where
+  parse = listToMaybe . reads
