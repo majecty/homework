@@ -19,4 +19,10 @@ main = hspec $ do
     it "add 3 + 4 = 2" $ do
       add (MkMod 3) (MkMod 4) `shouldBe` MkMod 2
     it "should parse int" $ do
-      parseRing "1 + 2 * 5" == Just (MkMod 1)
+      parseRing "1 + 2 * 5" `shouldBe` Just (MkMod 1)
+
+  describe "Mat2x2" $ do
+    it "can add matrix " $ do
+      (parseRing :: String -> Maybe Mat2x2) "[[1,2][1,2]] + [[2,2][2,2]]" `shouldBe` parseRing "[[3,4][3,4]]"
+    it "can multiply matrix " $ do
+      (parseRing :: String -> Maybe Mat2x2) "[[1,2][1,2]] * [[2,2][2,2]]" `shouldBe` parseRing "[[6,6][6,6]]"
