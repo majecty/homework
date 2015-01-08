@@ -76,3 +76,20 @@ distribute (Add lhs rhs) = Add (distribute lhs) (distribute rhs)
 distribute (Mul (Add a1 a2) b) = distribute $ Add (Mul a1 b) (Mul a2 b)
 distribute (Mul a (Add b1 b2)) = distribute $ Add (Mul a b1) (Mul a b2)
 distribute others = others
+
+squashMulId :: (Eq ring, Ring ring) => RingExpr ring -> RingExpr ring
+squashMulId (AddInv a) = AddInv $ squashMulId $ a
+squashMulId (Add lhs rhs) = Add (squashMulId lhs) (squashMulId rhs)
+squashMulId (Mul (Lit lhsValue) (Lit rhsValue))
+  | lhsValue == mulId = Lit rhsValue
+  | rhsValue == mulId = Lit lhsValue
+  | otherwise = (Mul (Lit lhsValue) (Lit rhsValue))
+squashMulId (Mul a (Lit value))
+  | value == mulId = squashMulId a
+  | otherwise = (Mul (squashMulId a) (Lit value))
+squashMulId (Mul (Lit value) a)
+  | value == value = squashMulId a
+  | otherwise = (Mul (Lit value) (squashMulId a))
+squashMulId (Mul a MulId) = squashMulId a
+squashMulId (Mul MulId a) = squashMulId a
+squashMulId others = others
