@@ -1,7 +1,7 @@
 module HW05 where
 
+import Data.List
 import Ring
-import Parser
 
 data Mod5 = MkMod Integer
    deriving (Show, Eq)
@@ -23,3 +23,37 @@ instance Parsable Mod5 where
     | Just (int, left) <- parseInt inputString = Just ((intToMod5 int), left)
     | otherwise = Nothing
     where parseInt = (parse :: String -> Maybe (Integer, String))
+
+data Mat2x2 = MkMat Integer Integer Integer Integer
+  deriving (Show, Eq)
+
+instance Ring Mat2x2 where
+  addId = MkMat 0 0 0 0
+  addInv (MkMat a b c d) = MkMat (-a) (-b) (-c) (-d)
+  mulId = MkMat 1 0 0 1
+
+  add (MkMat a1 a2 a3 a4) (MkMat b1 b2 b3 b4) =
+    MkMat (a1 + b1) (a2 + b2) (a3 + b3) (a4 + b4)
+  mul (MkMat a1 a2 a3 a4) (MkMat b1 b2 b3 b4) =
+    MkMat (a1 * b1 + a2 * b3) (a1 * b2 + a2 * b4)
+          (a3 * b1 + a4 * b3) (a3 * b2 + a4 * b4)
+
+instance Parsable Mat2x2 where
+  parse inputStr = do restFromOpenParen <- stripPrefix "[[" inputStr
+                      (firstElem, restFromFirstElem) <- parse restFromOpenParen
+
+                      restFromFirstComma <- stripPrefix "," restFromFirstElem
+                      (secondElem, restFromSecondElem) <- parse restFromFirstComma
+
+                      restFromMiddleParen <- stripPrefix "][" restFromSecondElem
+                      (thirdElem, restFromThirdElem) <- parse restFromMiddleParen
+
+                      restFromSecondComma <- stripPrefix "," restFromThirdElem
+                      (fourthElem, restFromFourthElem) <- parse restFromSecondComma
+
+                      restFromAll <- stripPrefix "]]" restFromFourthElem
+                      return (MkMat firstElem secondElem thirdElem fourthElem, restFromAll)
+
+parseMatrix :: String -> Maybe (Mat2x2, String)
+parseMatrix = parse
+
