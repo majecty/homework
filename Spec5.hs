@@ -30,3 +30,7 @@ main = hspec $ do
   describe "distribute" $ do
     it "can distribute left" $ do
       distribute (Mul (Add (Lit 1) (Lit 3)) (Lit (2 :: Integer))) `shouldBe` Add (Mul (Lit 1) (Lit 2)) (Mul (Lit 3) (Lit (2 :: Integer)))
+
+  describe "squashMulId" $ do
+    it "can squash MulId" $ do
+      squashMulId (Mul (Lit (1 :: Integer)) (Lit 2)) `shouldBe` (Lit 2)
