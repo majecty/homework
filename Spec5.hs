@@ -26,3 +26,7 @@ main = hspec $ do
       (parseRing :: String -> Maybe Mat2x2) "[[1,2][1,2]] + [[2,2][2,2]]" `shouldBe` parseRing "[[3,4][3,4]]"
     it "can multiply matrix " $ do
       (parseRing :: String -> Maybe Mat2x2) "[[1,2][1,2]] * [[2,2][2,2]]" `shouldBe` parseRing "[[6,6][6,6]]"
+
+  describe "distribute" $ do
+    it "can distribute left" $ do
+      distribute (Mul (Add (Lit 1) (Lit 3)) (Lit (2 :: Integer))) `shouldBe` Add (Mul (Lit 1) (Lit 2)) (Mul (Lit 3) (Lit (2 :: Integer)))
