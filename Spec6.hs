@@ -20,3 +20,11 @@ main = hspec $ do
       ynToBool (String "N") `shouldBe` (Bool False)
     it "other values does not change" $ do
       ynToBool (String "XXN") `shouldBe` (String "XXN")
+    it "Can change string in array" $ do
+      fmap ynToBool (decode "[\"Y\"]") `shouldBe` (decode "[true]")
+
+  describe "parseData" $ do
+    it "same with eitherDecode when not using Y or N" $ do
+      parseData "[false]" `shouldBe` eitherDecode "[false]"
+    it "Change Y to true" $ do
+      parseData "[\"Y\"]" `shouldBe` eitherDecode "[true]"
