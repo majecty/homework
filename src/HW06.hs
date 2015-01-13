@@ -24,7 +24,7 @@ data Market = Market { marketname :: T.Text
                     ,  x :: Float
                     ,  y :: Float
                     ,  state :: T.Text }
-  deriving (Show, Generic)
+  deriving (Show, Generic, Eq)
 
 instance FromJSON Market
 
