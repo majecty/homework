@@ -90,3 +90,18 @@ lastFound = compose2 lastListToMaybe (search (:[]))
 
 allFound :: Searcher [Market]
 allFound = search (:[])
+
+data YOrderMarket =  YOrderMarket { getMarket :: Market }
+  deriving (Eq, Show)
+
+instance Ord YOrderMarket where
+  (<=) (YOrderMarket lhsMarket) (YOrderMarket rhsMarcket) = (y lhsMarket) <= (y rhsMarcket)
+
+aggregateOrderByY :: Market -> OrdList YOrderMarket
+aggregateOrderByY market = OrdList [YOrderMarket market]
+
+orderedNtoS :: Searcher [Market]
+orderedNtoS =
+  let yOrderMarketListSearcher = search aggregateOrderByY in
+  let extractMarket = fmap getMarket . getOrdList in
+  compose2 extractMarket yOrderMarketListSearcher
