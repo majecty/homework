@@ -87,3 +87,6 @@ lastListToMaybe xs = Just (last xs)
 
 lastFound :: Searcher (Maybe Market)
 lastFound = compose2 lastListToMaybe (search (:[]))
+
+allFound :: Searcher [Market]
+allFound = search (:[])
