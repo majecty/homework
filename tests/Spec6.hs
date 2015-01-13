@@ -61,3 +61,11 @@ main = hspec $ do
     it "should return None when search fail" $ do
       let ioMarkets = loadData
       fmap (firstFound "emptyinput") ioMarkets `shouldReturn` Nothing
+
+  describe "lastFound" $ do
+    it "should find first value" $ do
+      let ioMarkets = loadData
+      fmap (lastFound "Farmers") ioMarkets `shouldReturn` Just (Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"})
+    it "should return None when search fail" $ do
+      let ioMarkets = loadData
+      fmap (lastFound "emptyinput") ioMarkets `shouldReturn` Nothing
