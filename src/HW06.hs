@@ -80,3 +80,10 @@ compose2 = (.) . (.)
 
 firstFound :: Searcher (Maybe Market)
 firstFound = compose2 listToMaybe (search (:[]))
+
+lastListToMaybe :: [a] -> Maybe a
+lastListToMaybe [] = Nothing
+lastListToMaybe xs = Just (last xs)
+
+lastFound :: Searcher (Maybe Market)
+lastFound = compose2 lastListToMaybe (search (:[]))
