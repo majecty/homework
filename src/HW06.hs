@@ -3,7 +3,7 @@
 module HW06 where
 
 import Data.Aeson
--- import Data.Monoid
+import Data.Monoid
 import GHC.Generics
 import qualified Data.ByteString.Lazy.Char8 as B
 import qualified Data.Text                  as T
@@ -23,7 +23,7 @@ data Market = Market { marketname :: T.Text
                     ,  x :: Float
                     ,  y :: Float
                     ,  state :: T.Text }
-  deriving (Show, Generic, Eq)
+  deriving (Show, Generic)
 
 instance FromJSON Market
 
@@ -42,3 +42,37 @@ loadData = do
   filedata <- B.readFile "markets.json"
   let parseResult = parseMarkets filedata
   either fail return parseResult
+
+data OrdList a = OrdList { getOrdList :: [a] }
+   deriving (Eq, Show)
+
+mergeTwoListWithOrder :: Ord a => [a] -> [a] -> [a]
+mergeTwoListWithOrder xs [] = xs
+mergeTwoListWithOrder [] ys = ys
+mergeTwoListWithOrder xs@(x:xLefts) ys@(y:yLefts) = case compare x y of
+  LT -> x:(mergeTwoListWithOrder xLefts ys)
+  EQ -> x:(mergeTwoListWithOrder xLefts ys)
+  GT -> y:(mergeTwoListWithOrder xs yLefts)
+
+instance Ord a => Monoid (OrdList a) where
+  mempty = OrdList []
+  mappend (OrdList lhs) (OrdList rhs) = OrdList $ mergeTwoListWithOrder lhs rhs
+
+ -- you’ll need to fill in the ellipses
+evens :: OrdList Integer
+evens = OrdList [2,4,6]
+odds :: OrdList Integer
+odds = OrdList [1,3,5]
+combined :: OrdList Integer
+combined = evens <> odds
+
+marketWithName :: Market -> (T.Text, Market)
+marketWithName mkt@(Market { marketname = name }) = (name, mkt)
+
+type Searcher m = T.Text -> [Market] -> m
+search :: Monoid m => (Market -> m) -> Searcher m
+search _ _ [] = mempty
+search resultMaker searchInput (fstMarket@(Market { marketname = name }):otherMarkets) =
+  case T.isInfixOf searchInput name of
+    True -> mappend (resultMaker fstMarket) (search resultMaker searchInput otherMarkets)
+    False -> mempty
