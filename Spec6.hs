@@ -46,3 +46,10 @@ main = hspec $ do
   describe "OrdList monoid" $ do
     it "should maintains the ordering invariants" $ do
       (OrdList [2,4,6]) <> (OrdList [1,3,5]) `shouldBe` OrdList [1,2,3,4,5,(6 :: Integer)]
+
+  describe "search" $ do
+    it "should search success simple input" $ do
+      let ioMarkets = loadData
+      let listMaker = (:[])
+      let searcher = search listMaker "Farmers"
+      fmap searcher ioMarkets `shouldReturn` [Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.13536, y = 36.841885, state = "Virginia"},Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"}]
