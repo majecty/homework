@@ -45,4 +45,4 @@ main = hspec $ do
 
   describe "OrdList monoid" $ do
     it "should maintains the ordering invariants" $ do
-      (OrdList [2,4,6]) <> (OrdList [1,3,5]) `shouldBe` OrdList [1,2,3,4,5,6]
+      (OrdList [2,4,6]) <> (OrdList [1,3,5]) `shouldBe` OrdList [1,2,3,4,5,(6 :: Integer)]
