@@ -28,3 +28,8 @@ main = hspec $ do
       parseData "[false]" `shouldBe` eitherDecode "[false]"
     it "Change Y to true" $ do
       parseData "[\"Y\"]" `shouldBe` eitherDecode "[true]"
+
+  describe "parseMarkets" $ do
+    it "parse market successfully." $ do
+      parseMarkets "[{\"marketname\": \"a\",\
+        \ \"x\": 1, \"y\":2, \"state\": \"b\" }]" `shouldBe` Right ([ Market "a" 1 2 "b" ])
