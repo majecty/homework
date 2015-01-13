@@ -3,6 +3,7 @@
 module HW06 where
 
 import Data.Aeson
+import Data.Maybe
 import Data.Monoid
 import GHC.Generics
 import qualified Data.ByteString.Lazy.Char8 as B
@@ -66,9 +67,6 @@ odds = OrdList [1,3,5]
 combined :: OrdList Integer
 combined = evens <> odds
 
-marketWithName :: Market -> (T.Text, Market)
-marketWithName mkt@(Market { marketname = name }) = (name, mkt)
-
 type Searcher m = T.Text -> [Market] -> m
 search :: Monoid m => (Market -> m) -> Searcher m
 search _ _ [] = mempty
@@ -76,3 +74,9 @@ search resultMaker searchInput (fstMarket@(Market { marketname = name }):otherMa
   case T.isInfixOf searchInput name of
     True -> mappend (resultMaker fstMarket) (search resultMaker searchInput otherMarkets)
     False -> mempty
+
+compose2 :: (c -> d) -> (a -> b -> c) -> a -> b -> d
+compose2 = (.) . (.)
+
+firstFound :: Searcher (Maybe Market)
+firstFound = compose2 listToMaybe (search (:[]))
