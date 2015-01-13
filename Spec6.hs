@@ -8,7 +8,7 @@ import Data.Monoid
 
 import HW06
 
-deriving instance Eq Market
+-- deriving instance Eq Market
 
 main :: IO()
 main = hspec $ do
@@ -74,3 +74,8 @@ main = hspec $ do
     it "should found all values" $ do
       let ioMarkets = loadData
       fmap (allFound "Farmers") ioMarkets `shouldReturn` [Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.13536, y = 36.841885, state = "Virginia"},Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"}]
+
+  describe "orderedNtoS" $ do
+    it "should search Famers correctly" $ do
+      let ioMarkets = loadData
+      fmap (orderedNtoS "Farmers") ioMarkets `shouldReturn` [Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"}, Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.13536, y = 36.841885, state = "Virginia"}]
