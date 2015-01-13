@@ -53,3 +53,11 @@ main = hspec $ do
       let listMaker = (:[])
       let searcher = search listMaker "Farmers"
       fmap searcher ioMarkets `shouldReturn` [Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.13536, y = 36.841885, state = "Virginia"},Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"}]
+
+  describe "firstFound" $ do
+    it "should find first value" $ do
+      let ioMarkets = loadData
+      fmap (firstFound "Farmers") ioMarkets `shouldReturn` Just (Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.13536, y = 36.841885, state = "Virginia"})
+    it "should return None when search fail" $ do
+      let ioMarkets = loadData
+      fmap (firstFound "emptyinput") ioMarkets `shouldReturn` Nothing
