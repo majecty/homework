@@ -52,7 +52,7 @@ main = hspec $ do
       ioMarkets <- loadData
       let listMaker = (:[])
       let searcher = search listMaker "Farmers"
-      searcher ioMarkets `shouldSatisfy` (isPrefixOf [Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.135361, y = 36.841885, state = "Virginia"},Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"}])
+      searcher ioMarkets `shouldSatisfy` (isPrefixOf [Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.13536, y = 36.841885, state = "Virginia"},Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"}])
 
   describe "firstFound" $ do
     it "should find first value" $ do
