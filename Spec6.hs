@@ -5,10 +5,10 @@ import Data.Aeson
 -- import Test.QuickCheck
 import Control.Exception (evaluate)
 import Data.Monoid
+import Data.List
 
 import HW06
 
--- deriving instance Eq Market
 
 main :: IO()
 main = hspec $ do
@@ -37,7 +37,7 @@ main = hspec $ do
   describe "parseMarkets" $ do
     it "Can parse Market from JSON" $ do
       parseMarkets "[{\"marketname\":\"market-name\", \"x\":1.234, \"y\":3.456, \"state\":\"market-state\"}]" `shouldBe` Right ([Market "market-name" 1.234 3.456 "market-state"])
-    it "should raises exception when faces ill-formed json" $ do
+    it "should raise exception when facing ill-formed json" $ do
       evaluate (parseMarkets "[{\"name\":\"market-name\", \"x\":\"1234\", \"y\":3.456, \"state\":\"market-state\"}]" )`shouldThrow` anyException
     it "parse market successfully." $ do
       parseMarkets "[{\"marketname\": \"a\",\
@@ -49,10 +49,10 @@ main = hspec $ do
 
   describe "search" $ do
     it "should search success simple input" $ do
-      let ioMarkets = loadData
+      ioMarkets <- loadData
       let listMaker = (:[])
       let searcher = search listMaker "Farmers"
-      fmap searcher ioMarkets `shouldReturn` [Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.13536, y = 36.841885, state = "Virginia"},Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"}]
+      searcher ioMarkets `shouldSatisfy` (isPrefixOf [Market {marketname = "\"Y Not Wednesday Farmers Market at Town Center\"", x = -76.135361, y = 36.841885, state = "Virginia"},Market {marketname = "10:10 Farmers Market", x = -84.7689, y = 33.7196, state = "Georgia"}])
 
   describe "firstFound" $ do
     it "should find first value" $ do
