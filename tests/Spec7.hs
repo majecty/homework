@@ -24,3 +24,7 @@ main = hspec $ do
   describe "fibs2" $ do
     it "is same with fibs1" $ do
       take 15 fibs1 `shouldBe` take 15 fibs2
+
+  describe "Stream" $ do
+    it "can show 20 variable" $ do
+      show [(1 :: Integer),1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] `shouldBe` show (streamRepeat (1 :: Integer))
