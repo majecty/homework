@@ -11,3 +11,14 @@ fibs1 = fmap fib [0..]
 
 fibs2 :: [Integer]
 fibs2 = [0,1] ++ zipWith (+) fibs2 (tail fibs2)
+
+data Stream a = Cons a (Stream a)
+
+streamToList :: Stream a -> [a]
+streamToList (Cons a leftStream) = a : streamToList leftStream
+
+instance Show a => Show (Stream a) where
+   show stream = show $ take 20 (streamToList stream)
+
+streamRepeat :: a -> Stream a
+streamRepeat element = Cons element (streamRepeat element)
