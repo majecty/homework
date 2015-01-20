@@ -28,3 +28,5 @@ main = hspec $ do
   describe "Stream" $ do
     it "can show 20 variable" $ do
       show [(1 :: Integer),1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] `shouldBe` show (streamRepeat (1 :: Integer))
+    it "should implement stremFromSeed" $ do
+      take 5 (streamToList (streamFromSeed ('x' :) "o")) `shouldBe` ["o", "xo", "xxo", "xxxo", "xxxxo" ]
