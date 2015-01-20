@@ -22,3 +22,9 @@ instance Show a => Show (Stream a) where
 
 streamRepeat :: a -> Stream a
 streamRepeat element = Cons element (streamRepeat element)
+
+streamMap :: (a -> b) -> Stream a -> Stream b
+streamMap mapFunc (Cons firstA otherAs) = Cons (mapFunc firstA) (streamMap mapFunc otherAs)
+
+streamFromSeed :: (a -> a) -> a -> Stream a
+streamFromSeed translator firstSeed = (Cons firstSeed (streamFromSeed translator (translator firstSeed)))
