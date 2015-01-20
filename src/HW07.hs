@@ -28,3 +28,18 @@ streamMap mapFunc (Cons firstA otherAs) = Cons (mapFunc firstA) (streamMap mapFu
 
 streamFromSeed :: (a -> a) -> a -> Stream a
 streamFromSeed translator firstSeed = (Cons firstSeed (streamFromSeed translator (translator firstSeed)))
+
+nats :: Stream Integer
+nats = streamFromSeed (+1) 0
+
+interleaveStreams :: Stream a -> Stream a -> Stream a
+interleaveStreams (Cons first firstLeftStream) secondStream = Cons first $ (interleaveStreams secondStream firstLeftStream)
+
+zeros :: Stream Integer
+zeros = streamRepeat 0
+
+ones :: Stream Integer
+ones = streamRepeat 1
+
+ruler :: Stream Integer
+ruler = interleaveStreams zeros $ (streamMap (+1) ruler)
