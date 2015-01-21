@@ -32,3 +32,5 @@ main = hspec $ do
       take 5 (streamToList (streamFromSeed ('x' :) "o")) `shouldBe` ["o", "xo", "xxo", "xxxo", "xxxxo" ]
     it "should implement nats" $ do
       take 10 (streamToList nats) `shouldBe` [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+    it "should implement ruler" $ do
+      take 16 (streamToList ruler) `shouldBe` [0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4]
