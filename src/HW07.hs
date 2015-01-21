@@ -1,6 +1,8 @@
 
 module HW07 where
 
+import System.Random
+
 fib :: Integer -> Integer
 fib 0 = 0
 fib 1 = 1
@@ -43,3 +45,31 @@ ones = streamRepeat 1
 
 ruler :: Stream Integer
 ruler = interleaveStreams zeros $ (streamMap (+1) ruler)
+
+randomList :: (Random a, RandomGen g) => g -> [a]
+randomList randomGen = randomElement : (randomList nextGen)
+  where (randomElement, nextGen) = random randomGen
+
+randomInts :: Int -> [Int]
+randomInts n = take n (randomList generator)
+  where generator = mkStdGen 100
+
+minMax :: [Int] -> Maybe (Int, Int)
+minMax [] = Nothing   -- no min or max if there are no elements
+minMax xs = Just (minimum xs, maximum xs)
+
+minMaxWithMemoize :: (Int, Int) -> [Int] -> (Int, Int)
+minMaxWithMemoize subMinMax [] = subMinMax
+minMaxWithMemoize (subMin, subMax) (x:xs) = updatedSubMin `seq` updatedSubMax `seq` minMaxWithMemoize (updatedSubMin, updatedSubMax) xs
+  where updatedSubMin = min subMin x
+        updatedSubMax = max subMax x
+
+lazyMinMax :: [Int] -> Maybe (Int, Int)
+lazyMinMax [] = Nothing
+lazyMinMax (x:xs) = Just $ minMaxWithMemoize (x, x) xs
+
+main :: IO ()
+main = do
+  let inputSequence = randomInts 1000000
+  let minMaxResult = lazyMinMax inputSequence
+  print minMaxResult
