@@ -31,3 +31,7 @@ main = hspec $ do
       stringFitsFormat "2aa2aa" `shouldBe` True
     it "should fail simple input with 'b's" $ do
       stringFitsFormat "2bb2bb" `shouldBe` False 
+
+  describe "special Numbers" $ do
+    it "should same with" $ do
+      take 7 specialNumbers `shouldBe` [5, 10, 15, 20, 25, 30, 40]
