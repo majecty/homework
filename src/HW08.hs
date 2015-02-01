@@ -54,3 +54,34 @@ battleResult attackerDie defenderDie = case compare attackerDie defenderDie of
 battleResults :: [DieRoll] -> [DieRoll] -> ArmyCounts
 battleResults attackerDies defenderDies = fold eachBattleResults
   where eachBattleResults = zipWith battleResult attackerDies defenderDies
+
+-- battle region
+battle :: ArmyCounts -> StdRand ArmyCounts
+battle armyCounts = do
+  rolledAttackerDies <- rollAttackerDies armyCounts
+  rolledDefenderDies <- rollDefenderDies armyCounts
+  return $ battleResults rolledAttackerDies rolledDefenderDies
+
+rollAttackerDies :: ArmyCounts -> StdRand [DieRoll]
+rollAttackerDies armyCounts = do
+  let ac = attackerCount armyCounts
+  sequence $ take ac $ repeat dieRoll
+
+rollDefenderDies :: ArmyCounts -> StdRand [DieRoll]
+rollDefenderDies armyCounts = do
+  let dc = defenderCount armyCounts
+  sequence $ take dc $ repeat dieRoll
+
+maxAttackerCount :: Int
+maxAttackerCount = 3
+
+maxDefenderCount :: Int
+maxDefenderCount = 2
+
+attackerCount :: ArmyCounts -> Int
+attackerCount (ArmyCounts { attackers = totalCount }) = min maxAttackerCount availableCount
+  where availableCount = totalCount - 1
+
+defenderCount :: ArmyCounts -> Int
+defenderCount (ArmyCounts { defenders = totalCount }) = min maxDefenderCount totalCount
+
