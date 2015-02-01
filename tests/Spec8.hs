@@ -35,3 +35,11 @@ main = hspec $ do
   describe "special Numbers" $ do
     it "should same with" $ do
       take 7 specialNumbers `shouldBe` [5, 10, 15, 20, 25, 30, 40]
+
+  describe "battleResults" $ do
+    it "should pass example1" $ do
+      battleResults [3,6,4] [5,5] `shouldBe` ArmyCounts { attackers = -1, defenders = -1 }
+    it "should pass example2" $ do
+      battleResults [3,6,4] [5,6] `shouldBe` ArmyCounts { attackers = -2, defenders = 0 }
+    it "should pass example3" $ do
+      battleResults [4] [3,2] `shouldBe` ArmyCounts { attackers = 0, defenders = -1 }
