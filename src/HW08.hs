@@ -22,3 +22,6 @@ consumeAllBlock input = do
 
 stringFitsFormat :: String -> Bool
 stringFitsFormat = isJust . consumeAllBlock
+
+specialNumbers :: [Int]
+specialNumbers = [x | x <- [1..], x `mod` 5 == 0, x `mod` 7 /= 0 ]
