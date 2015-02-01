@@ -55,12 +55,17 @@ battleResults :: [DieRoll] -> [DieRoll] -> ArmyCounts
 battleResults attackerDies defenderDies = fold eachBattleResults
   where eachBattleResults = zipWith battleResult attackerDies defenderDies
 
--- battle region
 battle :: ArmyCounts -> StdRand ArmyCounts
 battle armyCounts = do
   rolledAttackerDies <- rollAttackerDies armyCounts
   rolledDefenderDies <- rollDefenderDies armyCounts
   return $ battleResults rolledAttackerDies rolledDefenderDies
+
+invade :: ArmyCounts -> StdRand ArmyCounts
+invade armyCounts
+  | attackers armyCounts <= minAttackerCount = return armyCounts
+  | defenders armyCounts <= 0 = return armyCounts
+  | otherwise = battle armyCounts >>= invade
 
 rollAttackerDies :: ArmyCounts -> StdRand [DieRoll]
 rollAttackerDies armyCounts = do
@@ -72,11 +77,14 @@ rollDefenderDies armyCounts = do
   let dc = defenderCount armyCounts
   sequence $ take dc $ repeat dieRoll
 
-maxAttackerCount :: Int
+maxAttackerCount :: Army
 maxAttackerCount = 3
 
-maxDefenderCount :: Int
+maxDefenderCount :: Army
 maxDefenderCount = 2
+
+minAttackerCount :: Army
+minAttackerCount = 1
 
 attackerCount :: ArmyCounts -> Int
 attackerCount (ArmyCounts { attackers = totalCount }) = min maxAttackerCount availableCount
