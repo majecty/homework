@@ -46,6 +46,9 @@ instance Monoid ArmyCounts where
     defenders = defenders lhs + defenders rhs
   }
 
+(//) :: Int -> Int -> Double
+a // b = fromIntegral a / fromIntegral b
+
 battleResult :: DieRoll -> DieRoll -> ArmyCounts
 battleResult attackerDie defenderDie = case compare attackerDie defenderDie of
   GT -> ArmyCounts { attackers = 0, defenders = -1 }
@@ -54,6 +57,17 @@ battleResult attackerDie defenderDie = case compare attackerDie defenderDie of
 battleResults :: [DieRoll] -> [DieRoll] -> ArmyCounts
 battleResults attackerDies defenderDies = fold eachBattleResults
   where eachBattleResults = zipWith battleResult attackerDies defenderDies
+
+successProb :: ArmyCounts -> StdRand Double
+successProb armyCounts = do
+  let totalTries = take 1000 $ repeat armyCounts
+  allBattleResults <- sequence $ map invade totalTries
+  let allIsWin = map isWin allBattleResults
+  let winCount = length $ filter id allIsWin
+  return (winCount // 1000)
+
+isWin :: ArmyCounts -> Bool
+isWin (ArmyCounts { defenders = defenderCount }) = defenderCount == 0
 
 battle :: ArmyCounts -> StdRand ArmyCounts
 battle armyCounts = do
