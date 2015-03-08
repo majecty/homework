@@ -14,8 +14,7 @@ class Renderable a where
 
 instance Renderable World where
   toPicture (World { field = fieldValue, leftPlayer = leftPlayerValue })
-    = translate (-screenWidthF / 2) (-screenHeightF / 2) $
-      (translate (screenWidthF / 2) (screenHeightF / 2) $ Circle fieldValue)
+    = Circle fieldValue
       <> (toPicture leftPlayerValue)
 
 instance Renderable Player where

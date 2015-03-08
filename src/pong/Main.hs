@@ -10,13 +10,15 @@ import Pong.World
 import Graphics.Gloss.Interface.Pure.Game
 
 initialWorld :: World
-initialWorld = World { field = 0, leftPlayer = Player { xPos = 10, yPos = 10 } }
+initialWorld = World { field = 0, leftPlayer = Player { xPos = 10 - (screenWidthF / 2), yPos = 10 } }
 
 step :: Float -> World -> World
 step elapsed w@(World { field = fieldValue }) = w { field = fieldValue + elapsed }
 
 react :: Event -> World -> World
-react ev w@(World { field = fieldValue }) = w
+react (EventMotion (_, mouseYPos)) world@(World { leftPlayer = playerValue })
+  = world { leftPlayer = playerValue { yPos = mouseYPos } }
+react _ w = w
 
 render :: World -> Picture
 render world = toPicture world
