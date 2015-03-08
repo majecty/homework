@@ -3,11 +3,11 @@
 module Main (main) where
 
 import Pong.Constants
+import Pong.Player
+import Pong.View
 
 import Graphics.Gloss.Interface.Pure.Game
 import Data.Monoid
-
-data Player = Player { xPos :: Float, yPos :: Float }
 
 data World = World { field :: Float,
     leftPlayer :: Player
@@ -23,13 +23,10 @@ react :: Event -> World -> World
 react ev w@(World { field = fieldValue }) = w
 
 render :: World -> Picture
-render (World { field = fieldValue, leftPlayer = Player { xPos = xPosValue, yPos = yPosValue } })
+render (World { field = fieldValue, leftPlayer = leftPlayerValue })
   = translate (-screenWidthF / 2) (-screenHeightF / 2) $
     (translate (screenWidthF / 2) (screenHeightF / 2) $ Circle fieldValue)
-    <> (translate xPosValue yPosValue $ polygon playerPath)
-  where
-    playerPath = [(0,0), (fromIntegral playerWidth, 0),
-      (fromIntegral playerWidth, fromIntegral playerHeight), (0, fromIntegral playerHeight)]
+    <> (toPicture leftPlayerValue)
 
 main :: IO ()
 main = do
