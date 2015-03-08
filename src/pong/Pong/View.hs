@@ -19,7 +19,10 @@ instance Renderable World where
 
 instance Renderable Player where
   toPicture Player { xPos = xPosValue, yPos = yPosValue }
-    = (translate xPosValue yPosValue $ polygon playerPath)
+    = translate (-(fst anchor)) (-(snd anchor)) $
+      translate xPosValue yPosValue $
+      polygon playerPath
     where
       playerPath = [(0,0), (fromIntegral playerWidth, 0),
         (fromIntegral playerWidth, fromIntegral playerHeight), (0, fromIntegral playerHeight)]
+      anchor = (playerWidthF / 2, playerHeightF / 2)
